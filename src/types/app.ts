@@ -33,7 +33,7 @@ export type AppAction =
     | { type: 'LOAD_CONFIG'; payload: AppConfig }
     | { type: 'RESET' };
 
-export const APP_VERSION = 'v2.0.0';
+export const APP_VERSION = 'v2.0.1';
 export const APP_LAST_UPDATE = '14 มกราคม 2569';
 export const APP_TITLE = 'SAR for Academic Research';
 export const APP_NAME = 'SAR for Academic Research Paper';

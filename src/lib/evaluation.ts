@@ -15,7 +15,7 @@ export function calculateSummary(expertsData: {
 }): EvaluationSummary {
     const summary: EvaluationSummary = {
         totalScore: 0,
-        maxPossibleScore: 92,
+        maxPossibleScore: 100,
         percentage: 0,
         qualityLevel: '',
         criteriaAverages: []

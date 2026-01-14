@@ -75,7 +75,7 @@ export default function ScoreTable() {
                         <td colSpan={5} className="p-3 border border-gray-200"></td>
                         <td className="p-3 border border-gray-200 text-center">รวม</td>
                         <td className="p-3 border border-gray-200 text-center">
-                            {summary.totalScore.toFixed(2)}/92
+                            {summary.totalScore.toFixed(2)}/100
                         </td>
                     </tr>
                 </tfoot>

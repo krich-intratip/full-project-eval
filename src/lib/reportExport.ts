@@ -294,7 +294,7 @@ export function generateHtmlReport(results: EvaluationResults): string {
                         <div class="expert-avatar">${expert.avatar}</div>
                         <div class="expert-name">${expert.name}</div>
                         <div class="expert-title">${expert.title}</div>
-                        <div class="expert-score" style="color: ${expert.borderColor}">${totalScore.toFixed(1)}/92</div>
+                        <div class="expert-score" style="color: ${expert.borderColor}">${totalScore.toFixed(1)}/100</div>
                         <div class="expert-quote" style="border-left: 3px solid ${expert.borderColor}">"${expertData.summaryQuote}"</div>
                     </div>
                     `;

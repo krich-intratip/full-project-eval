@@ -3,9 +3,9 @@
 import { Expert, experts, evaluationCriteria } from '@/types/evaluation';
 
 export function generateExpertPrompt(expertId: string, pdfText: string): string {
-    const expert = experts[expertId];
+  const expert = experts[expertId];
 
-    return `คุณคือ "${expert.name}" - ${expert.title}
+  return `คุณคือ "${expert.name}" - ${expert.title}
 
 ประสบการณ์: ${expert.experience}
 จุดเน้นในการประเมิน: ${expert.focus}
@@ -58,7 +58,7 @@ ${evaluationCriteria.map((c, i) => `${i + 1}. ${c.name} (น้ำหนัก �
 }
 
 export function generateSummaryPrompt(pdfText: string): string {
-    return `คุณเป็นผู้เชี่ยวชาญด้านการวิเคราะห์เอกสารโครงการ Academic SAR (Self-Assessment Report)
+  return `คุณเป็นผู้เชี่ยวชาญด้านการวิเคราะห์เอกสารโครงการ Academic SAR (Self-Assessment Report)
 
 กรุณาวิเคราะห์และสรุปเอกสารงานวิจัยต่อไปนี้เป็นประเด็นสำคัญ:
 
@@ -108,20 +108,20 @@ ${pdfText.substring(0, 15000)}
 }
 
 export function generateImprovedDraftPrompt(
-    projectName: string,
-    organizationName: string,
-    totalScore: number,
-    percentage: number,
-    recommendations: Array<{ priority: string; title: string; detail: string; source: string }>,
-    strengths: string[],
-    weaknesses: string[]
+  projectName: string,
+  organizationName: string,
+  totalScore: number,
+  percentage: number,
+  recommendations: Array<{ priority: string; title: string; detail: string; source: string }>,
+  strengths: string[],
+  weaknesses: string[]
 ): string {
-    return `คุณเป็นผู้เชี่ยวชาญด้านการเขียนเอกสารวิจัยทางวิชาการ กรุณาสร้างร่างเอกสารงานวิจัยฉบับปรับปรุงใหม่ โดยนำคำแนะนำจากผู้เชี่ยวชาญมาปรับใช้
+  return `คุณเป็นผู้เชี่ยวชาญด้านการเขียนเอกสารวิจัยทางวิชาการ กรุณาสร้างร่างเอกสารงานวิจัยฉบับปรับปรุงใหม่ โดยนำคำแนะนำจากผู้เชี่ยวชาญมาปรับใช้
 
 ข้อมูลงานวิจัยเดิม:
 - ชื่อเรื่อง: ${projectName}
 - สังกัด: ${organizationName}
-- คะแนนรวม: ${totalScore.toFixed(1)}/92 (${percentage.toFixed(1)}%)
+- คะแนนรวม: ${totalScore.toFixed(1)}/100 (${percentage.toFixed(1)}%)
 
 คำแนะนำจากผู้เชี่ยวชาญที่ต้องนำไปปรับปรุง:
 ${recommendations.map(r => `- [${r.priority}] ${r.title}: ${r.detail} (จาก: ${r.source})`).join('\n')}

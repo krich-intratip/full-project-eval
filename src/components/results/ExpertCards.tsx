@@ -31,7 +31,7 @@ export default function ExpertCards() {
                 <p className="text-xs text-gray-500 mb-4">{expert.experience}</p>
 
                 <div className="text-3xl font-bold mb-4" style={{ color: expert.borderColor }}>
-                    {totalScore.toFixed(1)}/92
+                    {totalScore.toFixed(1)}/100
                 </div>
 
                 <div className="text-sm italic text-gray-600 p-3 bg-white/50 rounded-lg border-l-4"

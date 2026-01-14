@@ -56,14 +56,14 @@ export interface EvaluationCriteria {
 }
 
 export const evaluationCriteria: EvaluationCriteria[] = [
-    { id: 1, name: 'ชื่อเรื่องและบทคัดย่อ', weight: 2, maxScore: 8 },
-    { id: 2, name: 'บทนำและการทบทวนวรรณกรรม', weight: 3, maxScore: 12 },
-    { id: 3, name: 'คำถามวิจัยและวัตถุประสงค์', weight: 3, maxScore: 12 },
-    { id: 4, name: 'ระเบียบวิธีวิจัย', weight: 4, maxScore: 16 },
-    { id: 5, name: 'ผลการวิจัยและการวิเคราะห์ข้อมูล', weight: 4, maxScore: 16 },
-    { id: 6, name: 'การอภิปรายผล', weight: 3, maxScore: 12 },
-    { id: 7, name: 'สรุปและข้อเสนอแนะ', weight: 2, maxScore: 8 },
-    { id: 8, name: 'การอ้างอิงและรูปแบบการเขียน', weight: 2, maxScore: 8 }
+    { id: 1, name: 'ชื่อเรื่องและบทคัดย่อ', weight: 2, maxScore: 9 },
+    { id: 2, name: 'บทนำและการทบทวนวรรณกรรม', weight: 3, maxScore: 13 },
+    { id: 3, name: 'คำถามวิจัยและวัตถุประสงค์', weight: 3, maxScore: 13 },
+    { id: 4, name: 'ระเบียบวิธีวิจัย', weight: 4, maxScore: 17 },
+    { id: 5, name: 'ผลการวิจัยและการวิเคราะห์ข้อมูล', weight: 4, maxScore: 17 },
+    { id: 6, name: 'การอภิปรายผล', weight: 3, maxScore: 13 },
+    { id: 7, name: 'สรุปและข้อเสนอแนะ', weight: 2, maxScore: 9 },
+    { id: 8, name: 'การอ้างอิงและรูปแบบการเขียน', weight: 2, maxScore: 9 }
 ];
 
 export interface ScoreItem {
