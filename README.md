@@ -79,7 +79,7 @@ npm run dev
 
 ## 👨‍💻 ผู้พัฒนา
 
-**[พล.ท.ดร.กริช อินทราทิพย์](https://www.canva.com/design/DAG7mNgWuVo/zeHJV8U2i8Qcd_InCC21xQ/view?utm_content=DAG7mNgWuVo&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h9a5468a0d1)**
+**[พล.ท.ดร.กริช อินทราทิพย์](https://portfolio-two-sepia-33.vercel.app/)**
 
 ## 📄 License
 
