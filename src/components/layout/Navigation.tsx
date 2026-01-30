@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { APP_VERSION, APP_LAST_UPDATE, APP_NAME } from '@/types/app';
+import { APP_VERSION, APP_NAME } from '@/types/app';
+import { useRubric } from '@/context/RubricContext';
 
-export type TabId = 'home' | 'guide' | 'about';
+export type TabId = 'home' | 'dashboard' | 'guide' | 'about';
 
 interface NavigationProps {
     activeTab: TabId;
@@ -11,25 +11,30 @@ interface NavigationProps {
 }
 
 const tabs = [
-    { id: 'home' as TabId, label: 'หน้าหลัก', icon: '🏠' },
+    { id: 'home' as TabId, label: 'ประเมินโครงการ', icon: '📝' },
+    { id: 'dashboard' as TabId, label: 'Dashboard', icon: '📊' },
     { id: 'guide' as TabId, label: 'คู่มือการใช้งาน', icon: '📖' },
     { id: 'about' as TabId, label: 'เกี่ยวกับโปรแกรม', icon: 'ℹ️' },
 ];
 
 export default function Navigation({ activeTab, onTabChange }: NavigationProps) {
+    const { rubric } = useRubric();
+
     return (
         <div className="w-full">
             {/* Header */}
-            <header className="bg-gradient-to-r from-[#E3F2FD] to-[#F3E5F5] p-8 md:p-10 rounded-t-2xl text-center shadow-lg">
-                <h1 className="text-3xl md:text-4xl font-bold text-[#1565C0] mb-2">
-                    📚 {APP_NAME}
+            <header className="bg-gradient-to-r from-[#1565C0] to-[#7B1FA2] p-8 md:p-10 rounded-t-2xl text-center shadow-lg">
+                <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                    🔬 {APP_NAME}
                 </h1>
-                <p className="text-lg text-gray-600">
-                    โดยผู้เชี่ยวชาญทางวิชาการ 3 ท่าน
+                <p className="text-lg text-white/80">
+                    โดยผู้ทรงคุณวุฒิ AI 3 ท่าน
                 </p>
-                <p className="text-sm text-gray-500 mt-3">
-                    {APP_VERSION} | อัปเดตล่าสุด: {APP_LAST_UPDATE}
-                </p>
+                <div className="flex justify-center gap-4 mt-3 text-sm text-white/70">
+                    <span>{APP_VERSION}</span>
+                    <span>|</span>
+                    <span>เกณฑ์: {rubric.metadata.shortName}</span>
+                </div>
             </header>
 
             {/* Navigation Tabs */}

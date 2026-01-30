@@ -33,8 +33,9 @@ export type AppAction =
     | { type: 'LOAD_CONFIG'; payload: AppConfig }
     | { type: 'RESET' };
 
-export const APP_VERSION = 'v2.1.0';
-export const APP_LAST_UPDATE = '15 มกราคม 2569';
-export const APP_TITLE = 'SAR for Academic Research';
-export const APP_NAME = 'SAR for Academic Research Paper';
+export const APP_VERSION = 'v3.0.0';
+export const APP_LAST_UPDATE = '30 มกราคม 2569';
+export const APP_TITLE = 'ระบบประเมินโครงการวิจัยขั้นกลั่นกรอง';
+export const APP_NAME = 'ระบบประเมินโครงการวิจัยขั้นกลั่นกรองโครงการ';
+export const APP_SHORT_NAME = 'SAR';
 

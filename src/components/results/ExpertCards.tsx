@@ -1,20 +1,22 @@
 'use client';
 
 import { useApp } from '@/context/AppContext';
-import { experts, ExpertEvaluation } from '@/types/evaluation';
+import { useRubric } from '@/context/RubricContext';
+import { ExpertEvaluation } from '@/types/evaluation';
 import { getExpertTotalScore } from '@/lib/evaluation';
 
 export default function ExpertCards() {
     const { state } = useApp();
+    const { rubric } = useRubric();
     const results = state.evaluationResults;
 
     if (!results?.experts) return null;
 
     const renderExpertCard = (expertId: string, expertData?: ExpertEvaluation) => {
-        const expert = experts[expertId];
+        const expert = rubric.experts.find(e => e.id === expertId);
         if (!expert || !expertData) return null;
 
-        const totalScore = getExpertTotalScore(expertData);
+        const totalScore = getExpertTotalScore(rubric, expertData);
 
         return (
             <div
@@ -31,7 +33,7 @@ export default function ExpertCards() {
                 <p className="text-xs text-gray-500 mb-4">{expert.experience}</p>
 
                 <div className="text-3xl font-bold mb-4" style={{ color: expert.borderColor }}>
-                    {totalScore.toFixed(1)}/100
+                    {totalScore.toFixed(1)}/{rubric.totalMaxScore}
                 </div>
 
                 <div className="text-sm italic text-gray-600 p-3 bg-white/50 rounded-lg border-l-4"
@@ -45,9 +47,9 @@ export default function ExpertCards() {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {renderExpertCard('expert1', results.experts.expert1)}
-            {renderExpertCard('expert2', results.experts.expert2)}
-            {renderExpertCard('expert3', results.experts.expert3)}
+            {rubric.experts.map(expert =>
+                renderExpertCard(expert.id, results.experts[expert.id as keyof typeof results.experts])
+            )}
         </div>
     );
 }

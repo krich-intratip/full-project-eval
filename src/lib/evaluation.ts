@@ -1,86 +1,99 @@
 // Evaluation Calculation Functions
+// Updated for flexible rubric system
 
 import {
-    EvaluationResults,
     EvaluationSummary,
     CriteriaAverage,
-    ExpertEvaluation,
-    evaluationCriteria
+    ExpertEvaluation
 } from '@/types/evaluation';
+import { Rubric } from '@/types/rubric';
+import { getAllCriteria, getCategoryByCriterionId, getDecisionLevel } from './rubricAdapter';
 
-export function calculateSummary(expertsData: {
-    expert1?: ExpertEvaluation;
-    expert2?: ExpertEvaluation;
-    expert3?: ExpertEvaluation;
-}): EvaluationSummary {
-    const summary: EvaluationSummary = {
-        totalScore: 0,
-        maxPossibleScore: 100,
-        percentage: 0,
-        qualityLevel: '',
-        criteriaAverages: []
-    };
+/**
+ * Calculate summary from expert evaluations
+ * Now accepts rubric as parameter for flexibility
+ */
+export function calculateSummary(
+    rubric: Rubric,
+    expertsData: {
+        expert1?: ExpertEvaluation;
+        expert2?: ExpertEvaluation;
+        expert3?: ExpertEvaluation;
+    }
+): EvaluationSummary {
+    const criteria = getAllCriteria(rubric);
+    const criteriaAverages: CriteriaAverage[] = [];
+    let totalScore = 0;
 
-    evaluationCriteria.forEach(criteria => {
-        let totalScore = 0;
+    criteria.forEach(criterion => {
+        let criterionTotal = 0;
         let count = 0;
 
         Object.values(expertsData).forEach(expert => {
             if (expert) {
-                const scoreObj = expert.scores.find(s => s.criteriaId === criteria.id);
+                const scoreObj = expert.scores.find(s => s.criterionId === criterion.id);
                 if (scoreObj) {
-                    totalScore += scoreObj.score;
+                    criterionTotal += scoreObj.score;
                     count++;
                 }
             }
         });
 
-        const average = count > 0 ? totalScore / count : 0;
-        const weightedScore = average * criteria.weight;
+        const average = count > 0 ? criterionTotal / count : 0;
+        const category = getCategoryByCriterionId(rubric, criterion.id);
 
-        summary.criteriaAverages.push({
-            criteriaId: criteria.id,
-            name: criteria.name,
+        criteriaAverages.push({
+            criterionId: criterion.id,
+            name: criterion.name,
             averageScore: average,
-            weightedScore: weightedScore,
-            maxWeightedScore: criteria.maxScore,
-            weight: criteria.weight
+            maxScore: criterion.maxScore,
+            categoryName: category?.name
         });
 
-        summary.totalScore += weightedScore;
+        totalScore += average;
     });
 
-    summary.percentage = (summary.totalScore / summary.maxPossibleScore) * 100;
+    const percentage = (totalScore / rubric.totalMaxScore) * 100;
+    const decisionLevel = getDecisionLevel(rubric, totalScore);
 
-    if (summary.percentage >= 90) {
-        summary.qualityLevel = 'Excellent (พร้อมตีพิมพ์)';
-    } else if (summary.percentage >= 80) {
-        summary.qualityLevel = 'Very Good (Minor Revision)';
-    } else if (summary.percentage >= 70) {
-        summary.qualityLevel = 'Good (Major Revision)';
-    } else if (summary.percentage >= 60) {
-        summary.qualityLevel = 'Fair (ต้องปรับปรุงมาก)';
-    } else {
-        summary.qualityLevel = 'Poor (ไม่พร้อมตีพิมพ์)';
-    }
-
-    return summary;
+    return {
+        totalScore,
+        maxPossibleScore: rubric.totalMaxScore,
+        percentage,
+        qualityLevel: decisionLevel.label,
+        decision: decisionLevel.decision,
+        criteriaAverages
+    };
 }
 
-export function getExpertTotalScore(expertData: ExpertEvaluation): number {
-    return expertData.scores.reduce((sum, s) => {
-        const criteria = evaluationCriteria.find(c => c.id === s.criteriaId);
-        return sum + (s.score * (criteria?.weight || 1));
-    }, 0);
+/**
+ * Get total score for a single expert
+ */
+export function getExpertTotalScore(
+    rubric: Rubric,
+    expertData: ExpertEvaluation
+): number {
+    return expertData.scores.reduce((sum, s) => sum + s.score, 0);
 }
 
+/**
+ * Generate overall summary text
+ */
 export function generateOverallSummary(
-    summary: EvaluationSummary,
-    expertsData: { expert1?: ExpertEvaluation; expert2?: ExpertEvaluation; expert3?: ExpertEvaluation }
+    rubric: Rubric,
+    summary: EvaluationSummary
 ): string {
-    const sorted = [...summary.criteriaAverages].sort((a, b) => b.averageScore - a.averageScore);
+    const sorted = [...summary.criteriaAverages].sort((a, b) => {
+        const aPercentage = a.averageScore / a.maxScore;
+        const bPercentage = b.averageScore / b.maxScore;
+        return bPercentage - aPercentage;
+    });
     const highest = sorted[0];
     const lowest = sorted[sorted.length - 1];
+
+    if (rubric.metadata.context === 'military') {
+        return `โครงการวิจัยนี้ได้รับการประเมินในระดับ "${summary.qualityLevel}" โดยมีจุดแข็งที่โดดเด่นในด้าน "${highest.name}" และควรเน้นการพัฒนาในด้าน "${lowest.name}" ผู้ทรงคุณวุฒิทั้ง 3 ท่านเห็นตรงกันว่าโครงการมีศักยภาพในการปรับปรุงให้ดียิ่งขึ้น`;
+    }
 
     return `งานวิจัยนี้ได้รับการประเมินในระดับ "${summary.qualityLevel}" โดยมีจุดแข็งที่โดดเด่นในด้าน "${highest.name}" และควรเน้นการพัฒนาในด้าน "${lowest.name}" ผู้เชี่ยวชาญทั้ง 3 ท่านเห็นตรงกันว่างานวิจัยมีศักยภาพในการปรับปรุงให้ดียิ่งขึ้น`;
 }
@@ -93,8 +106,15 @@ export interface CollectedRecommendation {
     source: string;
 }
 
+/**
+ * Collect all recommendations from experts
+ */
 export function collectAllRecommendations(
-    expertsData: { expert1?: ExpertEvaluation; expert2?: ExpertEvaluation; expert3?: ExpertEvaluation }
+    expertsData: {
+        expert1?: ExpertEvaluation;
+        expert2?: ExpertEvaluation;
+        expert3?: ExpertEvaluation;
+    }
 ): CollectedRecommendation[] {
     const allRecs: CollectedRecommendation[] = [];
 
@@ -114,3 +134,24 @@ export function collectAllRecommendations(
     return allRecs.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
 }
 
+/**
+ * Get category scores from expert evaluation
+ */
+export function getCategoryScores(
+    rubric: Rubric,
+    expertData: ExpertEvaluation
+): { categoryId: string; categoryName: string; score: number; maxScore: number }[] {
+    return rubric.categories.map(category => {
+        const score = category.criteria.reduce((sum, criterion) => {
+            const scoreItem = expertData.scores.find(s => s.criterionId === criterion.id);
+            return sum + (scoreItem?.score || 0);
+        }, 0);
+
+        return {
+            categoryId: category.id,
+            categoryName: category.name,
+            score,
+            maxScore: category.maxScore
+        };
+    });
+}

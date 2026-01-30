@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useApp } from '@/context/AppContext';
+import { useRubric } from '@/context/RubricContext';
 import { useEvaluation } from '@/hooks';
 import { Navigation, Footer } from '@/components/layout';
 import type { TabId } from '@/components/layout';
@@ -18,11 +19,12 @@ import {
   Recommendations,
   Roadmap
 } from '@/components/results';
-import { UserGuide, About } from '@/components/pages';
+import { UserGuide, About, Dashboard } from '@/components/pages';
 import { generateHtmlReport } from '@/lib/reportExport';
 
 export default function Home() {
   const { state, getEffectiveModel, saveConfig } = useApp();
+  const { rubric } = useRubric();
   const { testConnection, results } = useEvaluation();
   const [activeTab, setActiveTab] = useState<TabId>('home');
   const [connectionStatus, setConnectionStatus] = useState<{
@@ -53,7 +55,7 @@ export default function Home() {
   const handleDownloadReport = () => {
     if (!results) return;
 
-    const htmlContent = generateHtmlReport(results);
+    const htmlContent = generateHtmlReport(rubric, results);
     const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -68,6 +70,8 @@ export default function Home() {
   // Render content based on active tab
   const renderContent = () => {
     switch (activeTab) {
+      case 'dashboard':
+        return <Dashboard />;
       case 'guide':
         return <UserGuide />;
       case 'about':

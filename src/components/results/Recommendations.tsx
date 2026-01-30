@@ -1,8 +1,7 @@
 'use client';
 
 import { useApp } from '@/context/AppContext';
-import { experts } from '@/types/evaluation';
-import { getPriorityColor, getPriorityLabel } from '@/lib/utils';
+import { useRubric } from '@/context/RubricContext';
 
 interface RecommendationWithSource {
     priority: string;
@@ -14,6 +13,7 @@ interface RecommendationWithSource {
 
 export default function Recommendations() {
     const { state } = useApp();
+    const { rubric } = useRubric();
     const results = state.evaluationResults;
 
     if (!results?.experts) return null;
@@ -24,8 +24,10 @@ export default function Recommendations() {
 
     Object.entries(results.experts).forEach(([expertId, data]) => {
         if (!data) return;
+        const expertProfile = rubric.experts.find(e => e.id === expertId);
+        const expertName = expertProfile?.name || expertId;
         data.recommendations.forEach(rec => {
-            const recWithSource = { ...rec, source: experts[expertId].name };
+            const recWithSource = { ...rec, source: expertName };
             if (rec.priority === 'critical') critical.push(recWithSource);
             else if (rec.priority === 'high') high.push(recWithSource);
             else enhancement.push(recWithSource);

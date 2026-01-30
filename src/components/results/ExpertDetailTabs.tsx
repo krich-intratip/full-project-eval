@@ -2,25 +2,30 @@
 
 import { useState } from 'react';
 import { useApp } from '@/context/AppContext';
-import { experts, evaluationCriteria, ExpertEvaluation } from '@/types/evaluation';
-import { getScoreBgClass, getPriorityColor, getPriorityLabel } from '@/lib/utils';
+import { useRubric } from '@/context/RubricContext';
+import { ExpertEvaluation } from '@/types/evaluation';
+import { getCriterion } from '@/lib/rubricAdapter';
+import { getScoreBgClassByPercentage, getPriorityColor, getPriorityLabel } from '@/lib/utils';
 
 export default function ExpertDetailTabs() {
     const { state } = useApp();
-    const [activeTab, setActiveTab] = useState(1);
+    const { rubric } = useRubric();
+    const [activeTab, setActiveTab] = useState(0);
     const results = state.evaluationResults;
 
     if (!results?.experts) return null;
 
-    const tabs = [
-        { id: 1, expertId: 'expert1', data: results.experts.expert1 },
-        { id: 2, expertId: 'expert2', data: results.experts.expert2 },
-        { id: 3, expertId: 'expert3', data: results.experts.expert3 }
-    ];
+    const tabs = rubric.experts.map((expert, idx) => ({
+        id: idx,
+        expertId: expert.id,
+        expert: expert,
+        data: results.experts[expert.id as keyof typeof results.experts]
+    }));
 
     const renderExpertDetail = (expertId: string, data?: ExpertEvaluation) => {
         if (!data) return null;
-        const expert = experts[expertId];
+        const expert = rubric.experts.find(e => e.id === expertId);
+        if (!expert) return null;
 
         return (
             <div className="animate-fadeIn">
@@ -39,18 +44,20 @@ export default function ExpertDetailTabs() {
                         <thead>
                             <tr className="bg-gray-100">
                                 <th className="p-2 border text-left">หัวข้อ</th>
-                                <th className="p-2 border text-center w-20">คะแนน</th>
+                                <th className="p-2 border text-center w-24">คะแนน</th>
                                 <th className="p-2 border text-left">เหตุผล</th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.scores.map(scoreItem => {
-                                const criteria = evaluationCriteria.find(c => c.id === scoreItem.criteriaId);
+                                const criterion = getCriterion(rubric, scoreItem.criterionId);
+                                if (!criterion) return null;
+
                                 return (
-                                    <tr key={scoreItem.criteriaId}>
-                                        <td className="p-2 border">{scoreItem.criteriaId}. {criteria?.name}</td>
-                                        <td className={`p-2 border text-center font-bold ${getScoreBgClass(scoreItem.score)}`}>
-                                            {scoreItem.score}/4
+                                    <tr key={scoreItem.criterionId}>
+                                        <td className="p-2 border">{scoreItem.criterionId} {criterion?.name}</td>
+                                        <td className={`p-2 border text-center font-bold ${getScoreBgClassByPercentage(scoreItem.score, criterion.maxScore)}`}>
+                                            {scoreItem.score}/{criterion.maxScore}
                                         </td>
                                         <td className="p-2 border text-gray-600">{scoreItem.reason}</td>
                                     </tr>
@@ -101,25 +108,22 @@ export default function ExpertDetailTabs() {
     return (
         <div className="bg-white rounded-xl overflow-hidden">
             <div className="flex gap-1 p-2 bg-gray-100 flex-wrap">
-                {tabs.map(tab => {
-                    const expert = experts[tab.expertId];
-                    return (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`flex-1 min-w-[150px] px-5 py-3 rounded-xl font-medium transition-all duration-300
-                ${activeTab === tab.id
-                                    ? 'opacity-100 shadow-lg -translate-y-0.5'
-                                    : 'opacity-70 hover:opacity-90'
-                                }`}
-                            style={{ backgroundColor: expert.color }}
-                        >
-                            {expert.avatar} {expert.name.split(' ')[0]}
-                        </button>
-                    );
-                })}
+                {tabs.map(tab => (
+                    <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`flex-1 min-w-[150px] px-5 py-3 rounded-xl font-medium transition-all duration-300
+                            ${activeTab === tab.id
+                                ? 'opacity-100 shadow-lg -translate-y-0.5'
+                                : 'opacity-70 hover:opacity-90'
+                            }`}
+                        style={{ backgroundColor: tab.expert.color }}
+                    >
+                        {tab.expert.avatar} {tab.expert.name.split(' ')[0]}
+                    </button>
+                ))}
             </div>
-            <div className="p-6" style={{ backgroundColor: `${experts[tabs.find(t => t.id === activeTab)?.expertId || 'expert1'].color}20` }}>
+            <div className="p-6" style={{ backgroundColor: `${tabs[activeTab]?.expert.color}20` }}>
                 {tabs.map(tab => (
                     <div key={tab.id} className={activeTab === tab.id ? '' : 'hidden'}>
                         {renderExpertDetail(tab.expertId, tab.data)}

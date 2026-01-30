@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { AppProvider } from "@/context/AppContext";
+import { RubricProvider } from "@/context/RubricContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SAR for Academic Research",
-  description: "ระบบรีวิวงานวิจัยโดยผู้เชี่ยวชาญทางวิชาการ AI - Academic SAR Review System",
-  keywords: ["academic research", "SAR", "research review", "AI evaluation", "งานวิจัย", "ประเมินงานวิจัย"],
+  title: "ระบบประเมินโครงการวิจัยขั้นกลั่นกรองโครงการ",
+  description: "ระบบประเมินโครงการวิจัยโดยผู้ทรงคุณวุฒิ AI 3 ท่าน - Military Research Evaluation System",
+  keywords: ["research evaluation", "SAR", "military research", "AI evaluation", "ประเมินโครงการวิจัย", "สวพ.ทบ.", "กลั่นกรองโครงการ"],
   authors: [{ name: "พล.ท.ดร.กริช อินทราทิพย์" }],
   icons: {
     icon: "/favicon.svg",
@@ -23,9 +24,11 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
       <body className="antialiased">
-        <AppProvider>
-          {children}
-        </AppProvider>
+        <RubricProvider>
+          <AppProvider>
+            {children}
+          </AppProvider>
+        </RubricProvider>
       </body>
     </html>
   );
