@@ -1,6 +1,6 @@
 // Rubric Type Definitions
-// Version: 1.0.0
-// Last Updated: 2026-01-29
+// Version: 1.1.0
+// Last Updated: 2026-01-31
 
 /**
  * ระดับคะแนนสำหรับเกณฑ์ย่อย

@@ -1,9 +1,19 @@
 // Utility Functions
-// Updated for flexible rubric system
+// Updated: 2026-01-31 - Fixed division by zero issues
 
 import { SubCriterion } from '@/types/rubric';
 
+/**
+ * Safe division that returns 0 if divisor is 0
+ */
+function safeDivide(numerator: number, denominator: number): number {
+    if (denominator === 0 || !Number.isFinite(denominator)) return 0;
+    const result = numerator / denominator;
+    return Number.isFinite(result) ? result : 0;
+}
+
 export function formatFileSize(bytes: number): string {
+    if (!Number.isFinite(bytes) || bytes < 0) return '0 B';
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
@@ -26,7 +36,7 @@ export function formatThaiDate(date: Date = new Date()): string {
  * Get score color by percentage of max score (rubric-agnostic)
  */
 export function getScoreColorByPercentage(score: number, maxScore: number): string {
-    const percentage = (score / maxScore) * 100;
+    const percentage = safeDivide(score, maxScore) * 100;
     if (percentage >= 80) return '#81C784';  // Green
     if (percentage >= 60) return '#FFD54F';  // Yellow
     if (percentage >= 40) return '#FFB74D';  // Orange
@@ -37,6 +47,9 @@ export function getScoreColorByPercentage(score: number, maxScore: number): stri
  * Get score color from criterion's score levels
  */
 export function getScoreColorFromCriterion(criterion: SubCriterion, score: number): string {
+    if (!criterion?.scoreLevels || !Array.isArray(criterion.scoreLevels)) {
+        return '#E0E0E0';
+    }
     const level = criterion.scoreLevels.find(l => score >= l.min && score <= l.max);
     return level?.color || '#E0E0E0';
 }
@@ -45,7 +58,7 @@ export function getScoreColorFromCriterion(criterion: SubCriterion, score: numbe
  * Get score background class by percentage
  */
 export function getScoreBgClassByPercentage(score: number, maxScore: number): string {
-    const percentage = (score / maxScore) * 100;
+    const percentage = safeDivide(score, maxScore) * 100;
     if (percentage >= 80) return 'bg-green-100';
     if (percentage >= 60) return 'bg-yellow-100';
     if (percentage >= 40) return 'bg-orange-100';
@@ -87,6 +100,14 @@ export function getScoreBgClass(score: number): string {
  * Get quality color based on decision level
  */
 export function getQualityColor(level: string): string {
+    if (!level || typeof level !== 'string') return 'bg-score-1';
+
+    // Closeout rubric decisions
+    if (level.includes('ดีเยี่ยม')) return 'bg-score-4';
+    if (level.includes('เงื่อนไข')) return 'bg-score-3';
+    if (level.includes('รับทราบ')) return 'bg-score-2';
+    if (level.includes('ไม่เห็นชอบ')) return 'bg-score-1';
+
     // Military rubric decisions
     if (level.includes('เห็นชอบ') && !level.includes('เงื่อนไข')) return 'bg-score-4';
     if (level.includes('เงื่อนไข')) return 'bg-score-3';
@@ -103,6 +124,14 @@ export function getQualityColor(level: string): string {
  * Get quality color hex based on decision level
  */
 export function getQualityColorHex(level: string): string {
+    if (!level || typeof level !== 'string') return '#E57373';
+
+    // Closeout rubric decisions
+    if (level.includes('ดีเยี่ยม')) return '#81C784';
+    if (level.includes('เงื่อนไข')) return '#FFD54F';
+    if (level.includes('รับทราบ')) return '#3b82f6';
+    if (level.includes('ไม่เห็นชอบ')) return '#E57373';
+
     // Military rubric decisions
     if (level.includes('เห็นชอบ') && !level.includes('เงื่อนไข')) return '#81C784';
     if (level.includes('เงื่อนไข')) return '#FFD54F';
@@ -138,6 +167,7 @@ export function sleep(ms: number): Promise<void> {
 }
 
 export function cleanHtmlResponse(html: string): string {
+    if (!html || typeof html !== 'string') return '';
     return html
         .trim()
         .replace(/^```html\s*/i, '')

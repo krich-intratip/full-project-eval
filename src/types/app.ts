@@ -49,7 +49,7 @@ export type AppAction =
     | { type: 'LOAD_CONFIG'; payload: AppConfig }
     | { type: 'RESET' };
 
-export const APP_VERSION = 'v1.0.0';
+export const APP_VERSION = 'v1.1.0';
 export const APP_LAST_UPDATE = '31 มกราคม 2569';
 export const APP_TITLE = 'ระบบประเมินโครงการวิจัย(ขั้นปิดโครงการ) สวพ.ทบ.';
 export const APP_NAME = 'ระบบประเมินโครงการวิจัย(ขั้นปิดโครงการ)';

@@ -45,6 +45,19 @@ export function getScoreLevel(criterion: SubCriterion, score: number): ScoreLeve
  * Get decision level for total score
  */
 export function getDecisionLevel(rubric: Rubric, totalScore: number): DecisionLevel {
+    // Handle empty or missing decisionLevels
+    if (!rubric.decisionLevels || rubric.decisionLevels.length === 0) {
+        return {
+            decision: 'unknown',
+            label: 'ไม่สามารถประเมินได้',
+            min: 0,
+            max: 100,
+            color: '#9E9E9E',
+            description: 'ไม่มีข้อมูลเกณฑ์การตัดสิน',
+            icon: '❓'
+        };
+    }
+
     const level = rubric.decisionLevels.find(
         dl => totalScore >= dl.min && totalScore <= dl.max
     );
@@ -74,6 +87,9 @@ export function getScoreColor(criterion: SubCriterion, score: number): string {
  * Get score color by percentage of max score
  */
 export function getScoreColorByPercentage(score: number, maxScore: number): string {
+    // Prevent division by zero
+    if (maxScore <= 0) return '#9E9E9E';  // Gray for undefined/zero max
+
     const percentage = (score / maxScore) * 100;
     if (percentage >= 80) return '#81C784';  // Green
     if (percentage >= 60) return '#FFD54F';  // Yellow
@@ -92,6 +108,8 @@ export function isValidScore(criterion: SubCriterion, score: number): boolean {
  * Get percentage of score for a criterion
  */
 export function getScorePercentage(criterion: SubCriterion, score: number): number {
+    // Prevent division by zero
+    if (!criterion || criterion.maxScore <= 0) return 0;
     return (score / criterion.maxScore) * 100;
 }
 
