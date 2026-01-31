@@ -4,19 +4,21 @@
 import { Rubric, RubricId } from '@/types/rubric';
 import { academicRubric } from './academic';
 import { militaryRubric } from './military';
+import { closeoutRubric } from './closeout';
 
 /**
  * Registry of all available rubrics
  */
 export const rubricRegistry: Record<RubricId, Rubric> = {
     academic: academicRubric,
-    military: militaryRubric
+    military: militaryRubric,
+    closeout: closeoutRubric
 };
 
 /**
- * Default rubric ID - Military research is the default
+ * Default rubric ID - Closeout evaluation is the default
  */
-export const DEFAULT_RUBRIC_ID: RubricId = 'military';
+export const DEFAULT_RUBRIC_ID: RubricId = 'closeout';
 
 /**
  * Get rubric by ID
@@ -50,3 +52,4 @@ export function isValidRubricId(id: string): id is RubricId {
 // Re-export individual rubrics for direct access
 export { academicRubric } from './academic';
 export { militaryRubric } from './military';
+export { closeoutRubric } from './closeout';

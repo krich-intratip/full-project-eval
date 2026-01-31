@@ -95,4 +95,4 @@ export interface Rubric {
 /**
  * Rubric ID type
  */
-export type RubricId = 'academic' | 'military' | string;
+export type RubricId = 'academic' | 'military' | 'closeout' | string;

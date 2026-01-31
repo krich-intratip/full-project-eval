@@ -263,10 +263,13 @@ export function generateHtmlReport(rubric: Rubric, results: EvaluationResults): 
     const qualityBgColor = getQualityColorHex(summary.qualityLevel);
 
     // Context-specific labels
-    const isMilitary = rubric.metadata.context === 'military';
+    const isMilitary = rubric.metadata.context === 'military' || rubric.metadata.context === 'military-closeout';
+    const isCloseout = rubric.metadata.context === 'military-closeout';
     const projectLabel = isMilitary ? 'โครงการ' : 'งานวิจัย';
     const authorLabel = isMilitary ? 'หน่วยเจ้าของโครงการ' : 'ผู้แต่ง';
-    const systemTitle = isMilitary
+    const systemTitle = isCloseout
+        ? 'ระบบประเมินโครงการวิจัย(ขั้นปิดโครงการ) สวพ.ทบ.'
+        : isMilitary
         ? 'ระบบประเมินโครงการวิจัยขั้นกลั่นกรองโครงการ'
         : 'SAR for Academic Research Paper';
 
@@ -456,9 +459,12 @@ export function generateDashboardReport(rubric: Rubric, results: EvaluationResul
     const qualityBgColor = getQualityColorHex(summary.qualityLevel);
 
     // Context-specific labels
-    const isMilitary = rubric.metadata.context === 'military';
+    const isMilitary = rubric.metadata.context === 'military' || rubric.metadata.context === 'military-closeout';
+    const isCloseout = rubric.metadata.context === 'military-closeout';
     const projectLabel = isMilitary ? 'โครงการ' : 'งานวิจัย';
-    const systemTitle = isMilitary
+    const systemTitle = isCloseout
+        ? 'ระบบประเมินโครงการวิจัย(ขั้นปิดโครงการ) สวพ.ทบ.'
+        : isMilitary
         ? 'ระบบประเมินโครงการวิจัยขั้นกลั่นกรองโครงการ'
         : 'SAR for Academic Research Paper';
 
