@@ -1,11 +1,13 @@
 // AI Provider and Model Types
+// Updated: 2026-01-31 - Added DeepSeek and Kimi providers per ai-providers skill
 
-export type AIProvider = 'gemini' | 'openai' | 'openrouter';
+export type AIProvider = 'gemini' | 'deepseek' | 'kimi' | 'openrouter';
 
 export interface AIModel {
     value: string;
     label: string;
     isFree?: boolean;
+    pricing?: string;
 }
 
 export interface ProviderConfig {
@@ -29,19 +31,26 @@ export const providerConfigs: Record<AIProvider, ProviderConfig> = {
         ],
         endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/'
     },
-    openai: {
-        name: 'OpenAI ChatGPT',
-        keyLabel: 'OpenAI API Key',
-        info: 'รับ API Key ได้ที่ <a href="https://platform.openai.com/api-keys" target="_blank" class="text-blue-600 hover:underline">OpenAI Platform</a>',
+    deepseek: {
+        name: 'DeepSeek',
+        keyLabel: 'DeepSeek API Key',
+        info: 'รับ API Key ได้ที่ <a href="https://platform.deepseek.com/api_keys" target="_blank" class="text-blue-600 hover:underline">DeepSeek Platform</a><br/>🇨🇳 รองรับภาษาไทยดีมาก ราคาถูก (ต้องเติมเงิน)',
         models: [
-            { value: 'gpt-5', label: 'GPT-5 (ฉลาดสุด - Aug 2025)', isFree: false },
-            { value: 'gpt-5-mini', label: 'GPT-5 Mini (เร็ว ประหยัด)', isFree: false },
-            { value: 'gpt-4.1', label: 'GPT-4.1 (1M context)', isFree: false },
-            { value: 'gpt-4.1-mini', label: 'GPT-4.1 Mini (คุ้มค่า)', isFree: false },
-            { value: 'gpt-4o', label: 'GPT-4o (Multimodal)', isFree: false },
-            { value: 'gpt-4o-mini', label: 'GPT-4o Mini', isFree: false }
+            { value: 'deepseek-chat', label: 'DeepSeek Chat (แนะนำ - คุ้มค่า)', isFree: false, pricing: '$0.14/1M input' },
+            { value: 'deepseek-reasoner', label: 'DeepSeek Reasoner (Thinking - ฉลาดสุด)', isFree: false, pricing: '$0.55/1M input' }
         ],
-        endpoint: 'https://api.openai.com/v1/chat/completions'
+        endpoint: 'https://api.deepseek.com/chat/completions'
+    },
+    kimi: {
+        name: 'Kimi (Moonshot AI)',
+        keyLabel: 'Kimi API Key',
+        info: 'รับ API Key ได้ที่ <a href="https://platform.moonshot.cn/console/api-keys" target="_blank" class="text-blue-600 hover:underline">Moonshot Platform</a><br/>🇨🇳 รองรับภาษาไทยดี Context ยาว (ต้องเติมเงิน)',
+        models: [
+            { value: 'kimi-k2-0905-preview', label: 'Kimi K2 Preview (แนะนำ - ใหม่สุด)', isFree: false },
+            { value: 'kimi-k2-0711-preview', label: 'Kimi K2 0711 (เสถียร)', isFree: false },
+            { value: 'kimi-k2-thinking', label: 'Kimi K2 Thinking (Reasoning)', isFree: false }
+        ],
+        endpoint: 'https://api.moonshot.ai/v1/chat/completions'
     },
     openrouter: {
         name: 'OpenRouter',

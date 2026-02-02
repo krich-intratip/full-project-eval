@@ -30,16 +30,33 @@ export default function ApiKeyInput() {
                         </>
                     )
                 };
-            case 'openai':
+            case 'deepseek':
                 return {
-                    label: 'OpenAI API Key',
+                    label: 'DeepSeek API Key',
                     info: (
                         <>
                             รับ API Key ได้ที่{' '}
-                            <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer"
+                            <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener noreferrer"
                                 className="text-blue-600 hover:underline">
-                                OpenAI Platform
+                                DeepSeek Platform
                             </a>
+                            <br />
+                            🇨🇳 รองรับภาษาไทยดีมาก ราคาถูก (ต้องเติมเงิน)
+                        </>
+                    )
+                };
+            case 'kimi':
+                return {
+                    label: 'Kimi API Key',
+                    info: (
+                        <>
+                            รับ API Key ได้ที่{' '}
+                            <a href="https://platform.moonshot.cn/console/api-keys" target="_blank" rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline">
+                                Moonshot Platform
+                            </a>
+                            <br />
+                            🇨🇳 รองรับภาษาไทยดี Context ยาว (ต้องเติมเงิน)
                         </>
                     )
                 };

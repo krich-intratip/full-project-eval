@@ -1,5 +1,5 @@
 // AI Service Layer
-// Updated: 2026-01-31 - Fixed unsafe array access and error handling
+// Updated: 2026-01-31 - Added DeepSeek and Kimi providers per ai-providers skill
 
 import { AIProvider, providerConfigs } from '@/types/ai';
 
@@ -53,12 +53,12 @@ export async function callGemini(
     return data.candidates[0].content.parts[0].text;
 }
 
-export async function callOpenAI(
+export async function callDeepSeek(
     prompt: string,
     apiKey: string,
     model: string
 ): Promise<string> {
-    const response = await fetch(providerConfigs.openai.endpoint, {
+    const response = await fetch(providerConfigs.deepseek.endpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export async function callOpenAI(
     });
 
     if (!response.ok) {
-        const errorMessage = await parseErrorResponse(response, 'OpenAI API Error');
+        const errorMessage = await parseErrorResponse(response, 'DeepSeek API Error');
         throw new Error(errorMessage);
     }
 
@@ -81,8 +81,43 @@ export async function callOpenAI(
 
     // Safe access with validation
     if (!data?.choices?.[0]?.message?.content) {
-        console.error('Unexpected OpenAI response structure:', data);
-        throw new Error('OpenAI API ส่งข้อมูลในรูปแบบที่ไม่คาดคิด');
+        console.error('Unexpected DeepSeek response structure:', data);
+        throw new Error('DeepSeek API ส่งข้อมูลในรูปแบบที่ไม่คาดคิด');
+    }
+
+    return data.choices[0].message.content;
+}
+
+export async function callKimi(
+    prompt: string,
+    apiKey: string,
+    model: string
+): Promise<string> {
+    const response = await fetch(providerConfigs.kimi.endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: model,
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7,
+            max_tokens: 8192
+        })
+    });
+
+    if (!response.ok) {
+        const errorMessage = await parseErrorResponse(response, 'Kimi API Error');
+        throw new Error(errorMessage);
+    }
+
+    const data = await response.json();
+
+    // Safe access with validation
+    if (!data?.choices?.[0]?.message?.content) {
+        console.error('Unexpected Kimi response structure:', data);
+        throw new Error('Kimi API ส่งข้อมูลในรูปแบบที่ไม่คาดคิด');
     }
 
     return data.choices[0].message.content;
@@ -134,8 +169,10 @@ export async function callAI(
     switch (provider) {
         case 'gemini':
             return callGemini(prompt, apiKey, model);
-        case 'openai':
-            return callOpenAI(prompt, apiKey, model);
+        case 'deepseek':
+            return callDeepSeek(prompt, apiKey, model);
+        case 'kimi':
+            return callKimi(prompt, apiKey, model);
         case 'openrouter':
             return callOpenRouter(prompt, apiKey, model);
         default:

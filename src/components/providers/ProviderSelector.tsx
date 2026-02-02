@@ -4,8 +4,9 @@ import { useApp } from '@/context/AppContext';
 import { AIProvider, providerConfigs } from '@/types/ai';
 
 const providers: { id: AIProvider; icon: string; name: string }[] = [
-    { id: 'gemini', icon: '🔷', name: 'Google Gemini' },
-    { id: 'openai', icon: '🟢', name: 'OpenAI ChatGPT' },
+    { id: 'gemini', icon: '🔷', name: 'Google Gemini (ฟรี)' },
+    { id: 'deepseek', icon: '🇨🇳', name: 'DeepSeek' },
+    { id: 'kimi', icon: '🌙', name: 'Kimi (Moonshot)' },
     { id: 'openrouter', icon: '🔀', name: 'OpenRouter' }
 ];
 
@@ -30,7 +31,7 @@ export default function ProviderSelector() {
     return (
         <div className="mb-6">
             <label className="block font-medium mb-3">เลือก AI Provider ที่ต้องการใช้:</label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {providers.map(provider => (
                     <label
                         key={provider.id}

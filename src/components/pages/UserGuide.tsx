@@ -53,7 +53,7 @@ export default function UserGuide() {
                                 <div>
                                     <h4 className="font-semibold mb-1">เลือก AI Provider</h4>
                                     <p className="text-gray-600 text-sm">
-                                        เลือก Provider ที่ต้องการใช้งาน ได้แก่ Google Gemini (แนะนำ - ฟรี), OpenAI, หรือ OpenRouter
+                                        เลือก Provider ที่ต้องการใช้งาน ได้แก่ Google Gemini (แนะนำ - ฟรี), DeepSeek, Kimi หรือ OpenRouter
                                     </p>
                                 </div>
                             </div>
@@ -267,8 +267,9 @@ export default function UserGuide() {
                                     A: สามารถขอ API Key ได้ฟรีจาก:
                                 </p>
                                 <ul className="list-disc pl-5 mt-2 text-sm text-gray-600 space-y-1">
-                                    <li>Google Gemini: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">aistudio.google.com/apikey</a></li>
-                                    <li>OpenAI: <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">platform.openai.com/api-keys</a></li>
+                                    <li>Google Gemini (ฟรี): <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">aistudio.google.com/apikey</a></li>
+                                    <li>DeepSeek: <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">platform.deepseek.com/api_keys</a></li>
+                                    <li>Kimi (Moonshot): <a href="https://platform.moonshot.cn/console/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">platform.moonshot.cn/console/api-keys</a></li>
                                     <li>OpenRouter: <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">openrouter.ai/keys</a></li>
                                 </ul>
                             </div>
