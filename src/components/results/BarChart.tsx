@@ -36,7 +36,8 @@ export default function BarChart() {
                     </h4>
                     <div className="space-y-3">
                         {criteria.map(ca => {
-                            const percentage = (ca.averageScore / ca.maxScore) * 100;
+                            // Prevent division by zero
+                            const percentage = ca.maxScore > 0 ? (ca.averageScore / ca.maxScore) * 100 : 0;
 
                             return (
                                 <div key={ca.criterionId}>

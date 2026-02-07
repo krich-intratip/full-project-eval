@@ -12,6 +12,16 @@ type AboutTab = 'functional' | 'non-functional' | 'timeline';
 // Version history
 const VERSION_HISTORY = [
     {
+        version: 'v1.2.0',
+        date: '7 กุมภาพันธ์ 2569',
+        changes: [
+            'ปรับปรุงหน้าคู่มือเพิ่มวิธีสมัคร API ทุก Provider',
+            'เพิ่ม DeepSeek และ Kimi เป็น AI Provider หลัก',
+            'แก้ไข Bugs: Division by zero, Null access, Array bounds',
+            'ปรับปรุงความเสถียรของระบบโดยรวม'
+        ]
+    },
+    {
         version: 'v1.1.0',
         date: '31 มกราคม 2569',
         changes: [

@@ -354,12 +354,14 @@ export function generateHtmlReport(rubric: Rubric, results: EvaluationResults): 
             return expertData?.scores?.find(s => s.criterionId === criterion.id)?.score || 0;
         });
         const avg = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
-        const percentage = (avg / criterion.maxScore) * 100;
+        // Prevent division by zero
+        const percentage = criterion.maxScore > 0 ? (avg / criterion.maxScore) * 100 : 0;
         return `
                             <tr>
                                 <td style="padding-left: 24px;">${criterion.id} ${criterion.name}</td>
                                 ${scores.map(score => {
-            const pct = (score / criterion.maxScore) * 100;
+            // Prevent division by zero
+            const pct = criterion.maxScore > 0 ? (score / criterion.maxScore) * 100 : 0;
             const bgColor = pct >= 80 ? '#81C784' : pct >= 60 ? '#FFD54F' : pct >= 40 ? '#FFB74D' : '#E57373';
             return `<td class="score-cell" style="background: ${bgColor}">${score}</td>`;
         }).join('')}
@@ -605,8 +607,9 @@ export function generateDashboardReport(rubric: Rubric, results: EvaluationResul
                 ${rubric.experts.map(expert => {
         const expertData = results.experts[expert.id as keyof typeof results.experts];
         if (!expertData) return '';
-        const totalScore = expertData.scores.reduce((sum, s) => sum + s.score, 0);
-        const pct = (totalScore / rubric.totalMaxScore) * 100;
+        const totalScore = expertData.scores?.reduce((sum, s) => sum + (s.score || 0), 0) || 0;
+        // Prevent division by zero
+        const pct = rubric.totalMaxScore > 0 ? (totalScore / rubric.totalMaxScore) * 100 : 0;
         return `
                     <div class="expert-card" style="border-top: 5px solid ${expert.borderColor}; background: linear-gradient(180deg, ${expert.color} 0%, white 30%)">
                         <div class="expert-avatar">${expert.avatar}</div>

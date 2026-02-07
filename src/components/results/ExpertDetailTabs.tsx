@@ -119,7 +119,7 @@ export default function ExpertDetailTabs() {
                             }`}
                         style={{ backgroundColor: tab.expert.color }}
                     >
-                        {tab.expert.avatar} {tab.expert.name.split(' ')[0]}
+                        {tab.expert.avatar} {tab.expert.name?.split(' ')[0] || 'ผู้เชี่ยวชาญ'}
                     </button>
                 ))}
             </div>

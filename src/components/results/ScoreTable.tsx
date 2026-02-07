@@ -50,9 +50,10 @@ export default function ScoreTable() {
                             {category.criteria.map(criterion => {
                                 const scores = rubricExperts.map(expert => {
                                     const expertData = expertsData[expert.id as keyof typeof expertsData];
-                                    return expertData?.scores.find(s => s.criterionId === criterion.id)?.score || 0;
+                                    return expertData?.scores?.find(s => s.criterionId === criterion.id)?.score || 0;
                                 });
-                                const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+                                // Prevent division by zero
+                                const avg = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
 
                                 return (
                                     <tr key={criterion.id} className="hover:bg-gray-50">

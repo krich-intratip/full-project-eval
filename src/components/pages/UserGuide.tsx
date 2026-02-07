@@ -6,7 +6,7 @@ import { useRubric } from '@/context/RubricContext';
 
 export default function UserGuide() {
     const { rubric } = useRubric();
-    const [activeSection, setActiveSection] = useState<'steps' | 'faq'>('steps');
+    const [activeSection, setActiveSection] = useState<'steps' | 'faq' | 'api-guide'>('steps');
 
     return (
         <div className="space-y-6">
@@ -20,10 +20,10 @@ export default function UserGuide() {
             </div>
 
             {/* Section Toggle */}
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-2 flex-wrap">
                 <button
                     onClick={() => setActiveSection('steps')}
-                    className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
                         activeSection === 'steps'
                             ? 'bg-[#1565C0] text-white'
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -32,8 +32,18 @@ export default function UserGuide() {
                     📝 ขั้นตอนการใช้งาน
                 </button>
                 <button
+                    onClick={() => setActiveSection('api-guide')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                        activeSection === 'api-guide'
+                            ? 'bg-[#1565C0] text-white'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                >
+                    🔑 วิธีสมัคร API Key
+                </button>
+                <button
                     onClick={() => setActiveSection('faq')}
-                    className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
                         activeSection === 'faq'
                             ? 'bg-[#1565C0] text-white'
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -43,7 +53,215 @@ export default function UserGuide() {
                 </button>
             </div>
 
-            {activeSection === 'steps' ? (
+            {activeSection === 'api-guide' ? (
+                <>
+                    {/* API Guide Section */}
+                    <Card title="🔷 Google Gemini (แนะนำ - ฟรี!)" icon="🔑">
+                        <div className="space-y-4">
+                            <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                                <p className="text-green-700 font-semibold">✅ แนะนำสำหรับผู้เริ่มต้น - ฟรี ไม่มีค่าใช้จ่าย!</p>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                                    <div>
+                                        <p className="text-gray-700">ไปที่ <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">Google AI Studio</a></p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                                    <div>
+                                        <p className="text-gray-700">ล็อกอินด้วย Google Account (Gmail)</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                                    <div>
+                                        <p className="text-gray-700">คลิกปุ่ม <strong>&quot;Create API Key&quot;</strong></p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">4</span>
+                                    <div>
+                                        <p className="text-gray-700">คัดลอก API Key ที่ได้ มาใส่ในระบบ</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-4 p-3 bg-gray-100 rounded-lg">
+                                <p className="text-sm text-gray-600"><strong>โมเดลแนะนำ:</strong> Gemini 2.5 Flash (เร็ว คุ้มค่า) หรือ Gemini 2.5 Pro (Thinking)</p>
+                                <p className="text-sm text-gray-600 mt-1"><strong>ข้อจำกัด:</strong> ฟรี 60 requests/นาที (เพียงพอสำหรับการใช้งานทั่วไป)</p>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card title="🇨🇳 DeepSeek (ราคาถูก รองรับไทยดีมาก)" icon="🔑">
+                        <div className="space-y-4">
+                            <div className="p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+                                <p className="text-orange-700 font-semibold">💰 ต้องเติมเงินก่อนใช้งาน (ราคาถูกมาก ~$0.14/1M tokens)</p>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                                    <div>
+                                        <p className="text-gray-700">ไปที่ <a href="https://platform.deepseek.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">DeepSeek Platform</a></p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                                    <div>
+                                        <p className="text-gray-700">คลิก <strong>&quot;Sign Up&quot;</strong> สมัครด้วย Email หรือ Google Account</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                                    <div>
+                                        <p className="text-gray-700">ไปที่ <strong>&quot;Top Up&quot;</strong> เติมเงิน (ขั้นต่ำ $5) ผ่าน Credit Card หรือ Crypto</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">4</span>
+                                    <div>
+                                        <p className="text-gray-700">ไปที่ <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">API Keys</a> คลิก <strong>&quot;Create API Key&quot;</strong></p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">5</span>
+                                    <div>
+                                        <p className="text-gray-700">คัดลอก API Key มาใส่ในระบบ</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-4 p-3 bg-gray-100 rounded-lg">
+                                <p className="text-sm text-gray-600"><strong>โมเดลแนะนำ:</strong> DeepSeek Chat (คุ้มค่า) หรือ DeepSeek Reasoner (Thinking)</p>
+                                <p className="text-sm text-gray-600 mt-1"><strong>ข้อดี:</strong> รองรับภาษาไทยดีมาก ราคาถูกที่สุดในตลาด</p>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card title="🌙 Kimi / Moonshot AI (Context ยาว)" icon="🔑">
+                        <div className="space-y-4">
+                            <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+                                <p className="text-purple-700 font-semibold">💰 ต้องเติมเงินก่อนใช้งาน (รองรับ Context ยาวมาก)</p>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                                    <div>
+                                        <p className="text-gray-700">ไปที่ <a href="https://platform.moonshot.cn" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">Moonshot Platform</a> (ภาษาจีน)</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                                    <div>
+                                        <p className="text-gray-700">คลิก <strong>&quot;注册&quot; (สมัคร)</strong> สมัครด้วยเบอร์โทรหรือ Email</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                                    <div>
+                                        <p className="text-gray-700">เติมเงินผ่าน Alipay หรือ WeChat Pay</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">4</span>
+                                    <div>
+                                        <p className="text-gray-700">ไปที่ <a href="https://platform.moonshot.cn/console/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">API Keys</a> สร้าง Key ใหม่</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-4 p-3 bg-gray-100 rounded-lg">
+                                <p className="text-sm text-gray-600"><strong>โมเดลแนะนำ:</strong> Kimi K2 Preview (ใหม่สุด) หรือ Kimi K2 Thinking (Reasoning)</p>
+                                <p className="text-sm text-gray-600 mt-1"><strong>ข้อดี:</strong> รองรับ Context ยาวมาก เหมาะกับเอกสารขนาดใหญ่</p>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card title="🔀 OpenRouter (เข้าถึงทุกโมเดล)" icon="🔑">
+                        <div className="space-y-4">
+                            <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                                <p className="text-blue-700 font-semibold">✅ มีโมเดลฟรีให้เลือก + สามารถใช้ Claude, GPT, Qwen ได้</p>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                                    <div>
+                                        <p className="text-gray-700">ไปที่ <a href="https://openrouter.ai" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">OpenRouter.ai</a></p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                                    <div>
+                                        <p className="text-gray-700">คลิก <strong>&quot;Sign In&quot;</strong> ล็อกอินด้วย Google, GitHub หรือ Discord</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                                    <div>
+                                        <p className="text-gray-700">ไปที่ <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">Keys</a> คลิก <strong>&quot;Create Key&quot;</strong></p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="flex-shrink-0 w-7 h-7 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">4</span>
+                                    <div>
+                                        <p className="text-gray-700">(ถ้าต้องการโมเดลพรีเมียม) ไปที่ <strong>&quot;Credits&quot;</strong> เติมเงิน</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-4 p-3 bg-gray-100 rounded-lg">
+                                <p className="text-sm text-gray-600"><strong>โมเดลฟรีแนะนำ:</strong> Gemini 2.5 Flash, DeepSeek V3, Qwen 3 235B</p>
+                                <p className="text-sm text-gray-600 mt-1"><strong>โมเดลพรีเมียม:</strong> Claude Opus/Sonnet, GPT-5, Grok 3</p>
+                            </div>
+                        </div>
+                    </Card>
+
+                    {/* Comparison Table */}
+                    <Card title="📊 เปรียบเทียบ AI Providers" icon="📋">
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead>
+                                    <tr className="bg-gray-100">
+                                        <th className="p-3 text-left">Provider</th>
+                                        <th className="p-3 text-left">ราคา</th>
+                                        <th className="p-3 text-left">ภาษาไทย</th>
+                                        <th className="p-3 text-left">ความเร็ว</th>
+                                        <th className="p-3 text-left">แนะนำสำหรับ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr className="border-b">
+                                        <td className="p-3 font-medium">🔷 Gemini</td>
+                                        <td className="p-3 text-green-600">ฟรี</td>
+                                        <td className="p-3">⭐⭐⭐⭐</td>
+                                        <td className="p-3">⭐⭐⭐⭐⭐</td>
+                                        <td className="p-3">ผู้เริ่มต้น, ทดสอบระบบ</td>
+                                    </tr>
+                                    <tr className="border-b">
+                                        <td className="p-3 font-medium">🇨🇳 DeepSeek</td>
+                                        <td className="p-3 text-orange-600">$0.14/1M</td>
+                                        <td className="p-3">⭐⭐⭐⭐⭐</td>
+                                        <td className="p-3">⭐⭐⭐⭐</td>
+                                        <td className="p-3">เอกสารไทย, ราคาประหยัด</td>
+                                    </tr>
+                                    <tr className="border-b">
+                                        <td className="p-3 font-medium">🌙 Kimi</td>
+                                        <td className="p-3 text-orange-600">ตามการใช้งาน</td>
+                                        <td className="p-3">⭐⭐⭐⭐</td>
+                                        <td className="p-3">⭐⭐⭐</td>
+                                        <td className="p-3">เอกสารยาวมาก</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-3 font-medium">🔀 OpenRouter</td>
+                                        <td className="p-3 text-blue-600">ฟรี/ตามโมเดล</td>
+                                        <td className="p-3">⭐⭐⭐⭐</td>
+                                        <td className="p-3">⭐⭐⭐⭐</td>
+                                        <td className="p-3">ต้องการหลายโมเดล</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </Card>
+                </>
+            ) : activeSection === 'steps' ? (
                 <>
                     {/* Step 1 */}
                     <Card title="ขั้นตอนที่ 1: ตั้งค่า AI Provider" icon="⚙️">

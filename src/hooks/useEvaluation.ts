@@ -39,7 +39,10 @@ export function useEvaluation() {
             dispatch({ type: 'SET_CURRENT_STEP', payload: 1 });
             await sleep(1500);
 
-            // Get experts from rubric
+            // Get experts from rubric with safe access
+            if (!rubric.experts || rubric.experts.length < 3) {
+                throw new Error('เกณฑ์การประเมินต้องมีผู้เชี่ยวชาญอย่างน้อย 3 ท่าน');
+            }
             const [expert1, expert2, expert3] = rubric.experts;
 
             // Step 2: Expert 1 evaluation

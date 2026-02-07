@@ -195,8 +195,13 @@ export default function Dashboard() {
 
     // Evidence status mapping (simulated based on score)
     const getEvidenceStatus = (criterionId: string) => {
+        // Prevent division by zero
+        if (expertScores.length === 0) {
+            return { status: 'unknown', label: 'ไม่ทราบ', color: 'rgba(156,163,175,.35)', bg: 'rgba(156,163,175,.10)' };
+        }
+
         const avgCriterionScore = expertScores.reduce((sum, e) => {
-            const score = e.data?.scores.find(s => s.criterionId === criterionId)?.score || 0;
+            const score = e.data?.scores?.find(s => s.criterionId === criterionId)?.score || 0;
             return sum + score;
         }, 0) / expertScores.length;
 
@@ -204,9 +209,10 @@ export default function Dashboard() {
             .flatMap(c => c.criteria)
             .find(c => c.id === criterionId);
 
-        if (!criterion) return { status: 'unknown', label: 'ไม่ทราบ' };
+        if (!criterion) return { status: 'unknown', label: 'ไม่ทราบ', color: 'rgba(156,163,175,.35)', bg: 'rgba(156,163,175,.10)' };
 
-        const percentage = (avgCriterionScore / criterion.maxScore) * 100;
+        // Prevent division by zero
+        const percentage = criterion.maxScore > 0 ? (avgCriterionScore / criterion.maxScore) * 100 : 0;
         if (percentage >= 80) return { status: 'found', label: 'Found', color: 'rgba(34,197,94,.35)', bg: 'rgba(34,197,94,.10)' };
         if (percentage >= 50) return { status: 'partial', label: 'Found (in-report)', color: 'rgba(59,130,246,.35)', bg: 'rgba(59,130,246,.10)' };
         return { status: 'not-found', label: 'Not Provided', color: 'rgba(245,158,11,.35)', bg: 'rgba(245,158,11,.10)' };
